@@ -11,6 +11,7 @@ export function calculateStyleProfile(userId: string, answers: QuizOption[]): St
   const max = Math.max(1, sorted[0][1]);
   const normalized = Object.fromEntries(Object.entries(scores).map(([style, score]) => [style, Math.round((score / max) * 100)])) as Record<DecorStyle, number>;
   return {
+    id: crypto.randomUUID(),
     userId,
     scores: normalized,
     primaryStyle: sorted[0][0],

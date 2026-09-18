@@ -13,13 +13,18 @@
       <RouterLink v-for="item in nav" :key="item.path" :to="item.path" class="shrink-0 px-3 py-2 text-sm text-ink" active-class="bg-ink text-paper">{{ item.label }}</RouterLink>
     </header>
     <main class="p-5 md:ml-60 md:p-10">
-      <RouterView />
+      <ErrorBoundary>
+        <RouterView />
+      </ErrorBoundary>
     </main>
+    <ErrorToaster />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import ErrorBoundary from './components/common/ErrorBoundary.vue';
+import ErrorToaster from './components/common/ErrorToaster.vue';
 import { useThemeStore } from './stores/themeStore';
 
 const theme = useThemeStore();

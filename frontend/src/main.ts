@@ -2,7 +2,12 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import { router } from './router';
+import { registerGlobalErrorHandler } from './utils/errorHandler';
 import './styles/theme.css';
 import './styles/global.css';
 
-createApp(App).use(createPinia()).use(router).mount('#app');
+const app = createApp(App);
+app.use(createPinia());
+app.use(router);
+registerGlobalErrorHandler(app);
+app.mount('#app');

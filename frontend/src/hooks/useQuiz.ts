@@ -3,11 +3,14 @@ import { mockQuiz } from '../api/mockQuiz';
 import { QuizOption } from '../types';
 import { calculateStyleProfile } from '../utils/styleCalculator';
 
+const DEFAULT_USER_ID = 'local-user';
+
 export function useQuiz() {
   const currentIndex = ref(0);
   const answers = ref<QuizOption[]>([]);
   const currentQuestion = computed(() => mockQuiz[currentIndex.value]);
-  const progress = computed(() => Math.round((answers.value.length / mockQuiz.length) * 100));
+  const progress = computed(() => Math.round((Math.min(answers.value.length, mockQuiz.length) / mockQuiz.length) * 100));
+  const allAnswered = computed(() => answers.value.filter(Boolean).length === mockQuiz.length);
 
   function answer(option: QuizOption) {
     answers.value[currentIndex.value] = option;
@@ -15,8 +18,13 @@ export function useQuiz() {
   }
 
   function result() {
-    return calculateStyleProfile('local-user', answers.value);
+    return calculateStyleProfile(DEFAULT_USER_ID, answers.value.filter(Boolean));
   }
 
-  return { questions: mockQuiz, currentQuestion, currentIndex, answers, progress, answer, result };
+  function reset() {
+    currentIndex.value = 0;
+    answers.value = [];
+  }
+
+  return { questions: mockQuiz, currentQuestion, currentIndex, answers, progress, allAnswered, answer, result, reset };
 }
