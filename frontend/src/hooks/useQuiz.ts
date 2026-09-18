@@ -14,9 +14,14 @@ export function useQuiz() {
     if (currentIndex.value < mockQuiz.length - 1) currentIndex.value += 1;
   }
 
+  function reset() {
+    currentIndex.value = 0;
+    answers.value = [];
+  }
+
   function result() {
     return calculateStyleProfile('local-user', answers.value);
   }
 
-  return { questions: mockQuiz, currentQuestion, currentIndex, answers, progress, answer, result };
+  return { questions: mockQuiz, currentQuestion, currentIndex, answers, progress, answer, reset, result };
 }

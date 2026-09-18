@@ -1,15 +1,23 @@
 import { defineStore } from 'pinia';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { ThemeMode } from '../types';
 
+const THEME_KEY = 'theme-mode';
+
 export const useThemeStore = defineStore('theme', {
-  state: () => ({ mode: (localStorage.getItem('theme-mode') as ThemeMode) ?? 'light' }),
+  state: () => {
+    const { state, storageError } = useLocalStorage<ThemeMode>(THEME_KEY, 'light');
+    return { mode: state, error: storageError };
+  },
   actions: {
     toggle() {
       this.mode = this.mode === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme-mode', this.mode);
-      document.documentElement.dataset.theme = this.mode;
+      this.apply();
     },
     hydrate() {
+      this.apply();
+    },
+    apply() {
       document.documentElement.dataset.theme = this.mode;
     }
   }

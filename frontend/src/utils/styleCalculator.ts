@@ -9,8 +9,11 @@ export function calculateStyleProfile(userId: string, answers: QuizOption[]): St
   });
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]) as [DecorStyle, number][];
   const max = Math.max(1, sorted[0][1]);
-  const normalized = Object.fromEntries(Object.entries(scores).map(([style, score]) => [style, Math.round((score / max) * 100)])) as Record<DecorStyle, number>;
+  const normalized = Object.fromEntries(
+    Object.entries(scores).map(([style, score]) => [style, Math.round((score / max) * 100)])
+  ) as Record<DecorStyle, number>;
   return {
+    id: crypto.randomUUID(),
     userId,
     scores: normalized,
     primaryStyle: sorted[0][0],
